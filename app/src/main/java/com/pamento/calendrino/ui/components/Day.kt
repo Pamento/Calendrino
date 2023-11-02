@@ -42,7 +42,7 @@ fun Day(
 ) {
   var signalColor = if (important) Color.Red else MaterialTheme.colorScheme.onPrimary
   Surface(
-    modifier = Modifier.then(if (dayToDay) Modifier.border(2.dp, Color.Yellow) else Modifier)
+    modifier = Modifier.then(if (dayToDay) Modifier.border(2.dp, MaterialTheme.colorScheme.onPrimary) else Modifier)
   ) {
     Box(
       modifier = Modifier.size(48.dp),
@@ -54,7 +54,6 @@ fun Day(
         Row(
           modifier = Modifier.width(16.dp),
           horizontalArrangement = Arrangement.Center) {
-          //Donut(important)
           Rectangle(color = signalColor)
           Rectangle(modifier = Modifier.weight(0.3f),
             color = Color.Transparent)
@@ -119,7 +118,7 @@ fun Rectangle(color: Color,
 fun PreviewDay() {
   CalendrinoTheme {
     Surface {
-      Day(dayNumber = 17, dayToDay = false, important = false)
+      Day(dayNumber = 17, dayToDay = true, important = false)
     }
   }
 }
