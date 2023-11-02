@@ -17,12 +17,15 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.composed
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Outline
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.PathOperation
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.difference
 import androidx.compose.ui.tooling.preview.Preview
@@ -37,6 +40,7 @@ fun Day(
   dayToDay: Boolean,
   important: Boolean
 ) {
+  var signalColor = if (important) Color.Red else MaterialTheme.colorScheme.onPrimary
   Surface(
     modifier = Modifier.then(if (dayToDay) Modifier.border(2.dp, Color.Yellow) else Modifier)
   ) {
@@ -48,22 +52,16 @@ fun Day(
       ) {
         Text(text = dayNumber.toString())
         Row(
-          modifier = Modifier.fillMaxWidth(),
+          modifier = Modifier.width(16.dp),
           horizontalArrangement = Arrangement.Center) {
-          Donut(important)
+          //Donut(important)
+          Rectangle(color = signalColor)
+          Rectangle(modifier = Modifier.weight(0.3f),
+            color = Color.Transparent)
+          Rectangle(modifier = Modifier.weight(0.7f),
+            color = signalColor)
         }
       }
-    }
-  }
-}
-
-@Preview("Regular colors")
-@Preview("Dark colors", uiMode = Configuration.UI_MODE_NIGHT_YES)
-@Composable
-fun PreviewDay() {
-  CalendrinoTheme {
-    Surface {
-      Day(dayNumber = 17, dayToDay = false, important = false)
     }
   }
 }
@@ -100,5 +98,28 @@ fun Donut(important: Boolean) {
         }
     }
   ) {
+  }
+}
+
+@Composable
+fun Rectangle(color: Color,
+              modifier: Modifier = Modifier) {
+  Box(
+    modifier = modifier.composed {
+      size(2.dp)
+        .clip(RectangleShape)
+        .background(color)
+    }
+  )
+}
+
+@Preview("Regular colors")
+@Preview("Dark colors", uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Composable
+fun PreviewDay() {
+  CalendrinoTheme {
+    Surface {
+      Day(dayNumber = 17, dayToDay = false, important = false)
+    }
   }
 }
