@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">Calendrino</string>
+    <string name="day_week_1">M</string>
+    <string name="day_week_2">T</string>
+    <string name="day_week_3">W</string>
+    <string name="day_week_4">T</string>
+    <string name="day_week_5">F</string>
+    <string name="day_week_6">S</string>
+    <string name="day_week_7">S</string>
 </resources>

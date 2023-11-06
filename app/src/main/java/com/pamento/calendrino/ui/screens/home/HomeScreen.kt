@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import com.pamento.calendrino.ui.components.CalendrinoAppBar
+import com.pamento.calendrino.ui.components.MonthContainer
 import com.pamento.calendrino.ui.theme.CalendrinoTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -31,7 +32,7 @@ fun HomeScreen(
       modifier = modifier,
       color = MaterialTheme.colorScheme.onSurface
     ) {
-      Text(text = "Calendrino content go here.")
+      MonthContainer()
     }
   }
 }

@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.MaterialTheme
@@ -62,6 +63,18 @@ fun Day(
         }
       }
     }
+  }
+}
+
+@Composable
+fun DayName(
+  dayName: String,
+) {
+  Box(modifier = Modifier.padding(horizontal = 8.dp, vertical = 10.dp)) {
+    Text(
+      text = dayName,
+      //color = MaterialTheme.colorScheme.onSurface
+    )
   }
 }
 
@@ -120,5 +133,14 @@ fun PreviewDay() {
     Surface {
       Day(dayNumber = 17, dayToDay = true, important = false)
     }
+  }
+}
+
+@Preview("Regular colors")
+@Preview("Dark colors", uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Composable
+fun PreviewDayName() {
+  CalendrinoTheme {
+    DayName(dayName = "Mon")
   }
 }
