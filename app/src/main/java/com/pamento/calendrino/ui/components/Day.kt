@@ -7,11 +7,10 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -20,46 +19,39 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.geometry.Rect
-import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Outline
-import androidx.compose.ui.graphics.Path
-import androidx.compose.ui.graphics.PathOperation
 import androidx.compose.ui.graphics.RectangleShape
-import androidx.compose.ui.graphics.Shape
-import androidx.compose.ui.graphics.difference
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Density
-import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import com.pamento.calendrino.ui.theme.CalendrinoTheme
 
 @Composable
 fun Day(
   dayNumber: Number,
-  dayToDay: Boolean,
-  important: Boolean
+  isToday: Boolean,
+  important: Boolean,
+  isSelected: Boolean
 ) {
-  var signalColor = if (important) Color.Red else MaterialTheme.colorScheme.onPrimary
-  Surface(
-    modifier = Modifier.then(if (dayToDay) Modifier.border(2.dp, MaterialTheme.colorScheme.onPrimary) else Modifier)
-  ) {
+  val surfaceColor = if (isToday) MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.surfaceVariant
+  val impEventColor = if (important) Color.Red else surfaceColor
+  val todayColor = if (isSelected) MaterialTheme.colorScheme.secondary else surfaceColor
+  Surface {
     Box(
-      modifier = Modifier.size(48.dp),
+      // TODO 28/11: size must be dynamic or gird
+      modifier = Modifier.size(48.dp).background(surfaceColor).border(2.dp, todayColor, RoundedCornerShape(18)),
       contentAlignment = Alignment.Center) {
       Column(
         horizontalAlignment = Alignment.CenterHorizontally
       ) {
-        Text(text = dayNumber.toString())
+        Text(text = dayNumber.toString(), color = MaterialTheme.colorScheme.onSurface)
         Row(
           modifier = Modifier.width(16.dp),
           horizontalArrangement = Arrangement.Center) {
-          Rectangle(color = signalColor)
+          Rectangle(color = if (isSelected) impEventColor else surfaceColor)
           Rectangle(modifier = Modifier.weight(0.3f),
             color = Color.Transparent)
           Rectangle(modifier = Modifier.weight(0.7f),
-            color = signalColor)
+            color = if (isSelected) impEventColor else surfaceColor)
         }
       }
     }
@@ -73,43 +65,9 @@ fun DayName(
   Box(modifier = Modifier.padding(horizontal = 8.dp, vertical = 10.dp)) {
     Text(
       text = dayName,
-      //color = MaterialTheme.colorScheme.onSurface
+      color = MaterialTheme.colorScheme.onSurface,
+      style = MaterialTheme.typography.labelSmall,
     )
-  }
-}
-
-@Composable
-fun Donut(important: Boolean) {
-  var signalColor = if (important) Color.Red else MaterialTheme.colorScheme.onPrimary
-  Surface(
-    modifier = Modifier.size(8.dp),
-    color = signalColor,
-    shape = object : Shape {
-      override fun createOutline(
-        size: Size,
-        layoutDirection: LayoutDirection,
-        density: Density
-      ): Outline  {
-          val thickness = size.height / 4
-          val p1 = Path().apply {
-            addOval(Rect(0f, 0f, size.width - 1, size.height - 1))
-          }
-          val p2 = Path().apply {
-            addOval(
-              Rect(
-                thickness,
-                thickness,
-                size.width - 1 - thickness,
-                size.height - 1 - thickness
-              )
-            )
-          }
-          val p3 = Path()
-          p3.op(p1, p2, PathOperation.Difference)
-          return Outline.Generic(p3)
-        }
-    }
-  ) {
   }
 }
 
@@ -131,7 +89,7 @@ fun Rectangle(color: Color,
 fun PreviewDay() {
   CalendrinoTheme {
     Surface {
-      Day(dayNumber = 17, dayToDay = true, important = false)
+      Day(dayNumber = 17, isToday = false, important = true, isSelected = true)
     }
   }
 }
@@ -141,6 +99,6 @@ fun PreviewDay() {
 @Composable
 fun PreviewDayName() {
   CalendrinoTheme {
-    DayName(dayName = "Mon")
+    DayName(dayName = "M")
   }
 }
