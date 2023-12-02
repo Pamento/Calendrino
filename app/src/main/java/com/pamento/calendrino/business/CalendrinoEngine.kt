@@ -10,15 +10,14 @@ import java.util.Calendar.YEAR
 
 fun getMonth(dayId: String? = null): List<DayData> {
   val cldr = Calendar.getInstance()
-  var isToday = false
+  var dayOfMont: Int? = null
 
   dayId?.let {
     val (year: Int, month: Int, day: Int) = it.triple()
     cldr.set(YEAR, year)
     cldr.set(MONTH, month - 1)
   } ?: run {
-    isToday = true
-    val dayOfMont = cldr.get(DAY_OF_MONTH)
+    dayOfMont = cldr.get(DAY_OF_MONTH)
   }
 
   val totalDaysInMonth: Int = cldr.getActualMaximum(DAY_OF_MONTH)
@@ -31,7 +30,7 @@ fun getMonth(dayId: String? = null): List<DayData> {
     month = cldr.get(MONTH).toString(),
     firstDayOfMonth = cldr.get(Calendar.DAY_OF_WEEK),
     weekOfYear = cldr.get(Calendar.WEEK_OF_YEAR),
-    isToday = isToday,
+    isToday = dayOfMont,
   )
 
   return monthFactory(dayObject)
@@ -42,21 +41,21 @@ private fun monthFactory(dayWorker: DayWorker): List<DayData> {
   var dayOfWeekCycle = dayWorker.firstDayOfMonth
   var weekOfYearCycle = dayWorker.weekOfYear - 1 // Sunday = 1
 
-  repeat(dayWorker.totalDays) {
+  repeat(dayWorker.totalDays) { next ->
     val day = DayData(
         year = dayWorker.year,
         month = dayWorker.month,
-        day = it + 1, // 'it' = index = 0
+        day = next.inc(), // 'next' = index = 0
         dayOfWeek = dayOfWeekCycle,
         weekOfYear = weekOfYearCycle,
-        isToday = dayWorker.isToday
+        isToday = dayWorker.isToday != null && next.inc() == dayWorker.isToday
       )
 
     if (dayOfWeekCycle == 7) {
       dayOfWeekCycle = 1
-      weekOfYearCycle += 1
+      weekOfYearCycle.inc()
     } else {
-      dayOfWeekCycle += 1
+      dayOfWeekCycle.inc()
     }
 
     allMonth.add(day)
