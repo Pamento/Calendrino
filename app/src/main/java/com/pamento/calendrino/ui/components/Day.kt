@@ -1,5 +1,6 @@
 package com.pamento.calendrino.ui.components
 
+import android.annotation.SuppressLint
 import android.content.res.Configuration
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -7,6 +8,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -28,6 +30,7 @@ import com.pamento.calendrino.ui.theme.CalendrinoTheme
 
 @Composable
 fun Day(
+  modifier: Modifier = Modifier,
   dayData: DayData
 ) {
   val surfaceColor = if (dayData.isToday) MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.surfaceVariant
@@ -36,7 +39,7 @@ fun Day(
   Surface {
     Box(
       // TODO 28/11: size must be dynamic or gird
-      modifier = Modifier.size(48.dp).background(surfaceColor).border(2.dp, todayColor, RoundedCornerShape(18)),
+      modifier = modifier.background(surfaceColor).border(2.dp, todayColor, RoundedCornerShape(18)),
       contentAlignment = Alignment.Center) {
       Column(
         horizontalAlignment = Alignment.CenterHorizontally
@@ -58,9 +61,11 @@ fun Day(
 
 @Composable
 fun DayName(
+  modifier: Modifier = Modifier,
   dayName: String,
 ) {
-  Box(modifier = Modifier.padding(horizontal = 8.dp, vertical = 10.dp)) {
+  Box(modifier = modifier.padding(bottom = 8.dp),
+    contentAlignment = Alignment.Center) {
     Text(
       text = dayName,
       color = MaterialTheme.colorScheme.onSurface,
@@ -69,6 +74,7 @@ fun DayName(
   }
 }
 
+@SuppressLint("UnnecessaryComposedModifier")
 @Composable
 fun Rectangle(color: Color,
               modifier: Modifier = Modifier) {
@@ -87,12 +93,13 @@ fun Rectangle(color: Color,
 fun PreviewDay() {
   CalendrinoTheme {
     Surface {
-      Day(DayData(year = "2023", month = "12", day = 17, dayOfWeek = 1, weekOfYear = 46))
+      Day(modifier = Modifier.width(48.dp),
+        DayData(year = "2023", month = "12", day = 17, dayOfWeek = 1, weekOfYear = 46))
     }
   }
 }
 
-@Preview("Regular colors")
+@Preview("Regular colors", showBackground = true)
 @Preview("Dark colors", uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 fun PreviewDayName() {
