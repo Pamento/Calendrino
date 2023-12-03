@@ -6,9 +6,10 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -23,8 +24,10 @@ import androidx.compose.ui.composed
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.pamento.calendrino.R
 import com.pamento.calendrino.data.DayData
 import com.pamento.calendrino.ui.theme.CalendrinoTheme
 
@@ -43,21 +46,31 @@ fun Day(
   }
   Surface {
     Box(
-      modifier = modifier.background(surfaceColor).border(2.dp, todayColor, RoundedCornerShape(18)),
-      contentAlignment = Alignment.Center) {
+      modifier = modifier
+        .background(surfaceColor)
+        .border(2.dp, todayColor, RoundedCornerShape(18)),
+      contentAlignment = Alignment.Center
+    ) {
       Column(
         modifier = Modifier.padding(vertical = 8.dp),
         horizontalAlignment = Alignment.CenterHorizontally
       ) {
-        Text(text = dayData?.day.toString(), color = MaterialTheme.colorScheme.onSurface)
-        Row(
-          modifier = Modifier.width(16.dp),
-          horizontalArrangement = Arrangement.Center) {
-          Rectangle(color = impEventColor)
-          Rectangle(modifier = Modifier.weight(0.3f),
-            color = Color.Transparent)
-          Rectangle(modifier = Modifier.weight(0.7f),
-            color = impEventColor)
+        dayData?.let {
+          Text(text = it.day.toString(), color = MaterialTheme.colorScheme.onSurface)
+          Row(
+            modifier = Modifier.width(16.dp),
+            horizontalArrangement = Arrangement.Center
+          ) {
+            Rectangle(color = impEventColor)
+            Rectangle(
+              modifier = Modifier.weight(0.3f),
+              color = Color.Transparent
+            )
+            Rectangle(
+              modifier = Modifier.weight(0.7f),
+              color = impEventColor
+            )
+          }
         }
       }
     }
@@ -69,8 +82,10 @@ fun DayName(
   modifier: Modifier = Modifier,
   dayName: String,
 ) {
-  Box(modifier = modifier.padding(bottom = 8.dp),
-    contentAlignment = Alignment.Center) {
+  Box(
+    modifier = modifier.padding(bottom = 8.dp),
+    contentAlignment = Alignment.Center
+  ) {
     Text(
       text = dayName,
       color = MaterialTheme.colorScheme.onSurface,
@@ -81,8 +96,10 @@ fun DayName(
 
 @SuppressLint("UnnecessaryComposedModifier")
 @Composable
-fun Rectangle(color: Color,
-              modifier: Modifier = Modifier) {
+fun Rectangle(
+  color: Color,
+  modifier: Modifier = Modifier
+) {
   Box(
     modifier = modifier.composed {
       size(2.dp)
@@ -92,15 +109,33 @@ fun Rectangle(color: Color,
   )
 }
 
+@Composable
+fun AllWeekNamesBox() {
+  BoxWithConstraints(modifier = Modifier.fillMaxWidth()) {
+    val weekDaysNames = stringArrayResource(id = R.array.week_days_names)
+    val dayNameWidth = maxWidth / 7
+
+    Row(modifier = Modifier.fillMaxWidth()) {
+      weekDaysNames.forEach { dayName ->
+        DayName(modifier = Modifier.width(dayNameWidth), dayName = dayName)
+      }
+    }
+  }
+}
+
 @Preview("Regular colors")
 @Preview("Dark colors", uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 fun PreviewDay() {
   CalendrinoTheme {
     Surface {
-      Day(modifier = Modifier.width(48.dp),
-        DayData(year = "2023", month = "12", day = 17, dayOfWeek = 1, weekOfYear = 46,
-          isToday = true, isSelected = true, important = true))
+      Day(
+        modifier = Modifier.width(48.dp),
+        DayData(
+          year = "2023", month = "12", day = 17, dayOfWeek = 1, weekOfYear = 46,
+          isToday = true, isSelected = true, important = true
+        )
+      )
     }
   }
 }
@@ -111,5 +146,14 @@ fun PreviewDay() {
 fun PreviewDayName() {
   CalendrinoTheme {
     DayName(dayName = "M")
+  }
+}
+
+@Preview("Regular colors", showBackground = true)
+@Preview("Dark colors", uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Composable
+fun PreviewAllWeekNamesBox() {
+  CalendrinoTheme {
+    AllWeekNamesBox()
   }
 }

@@ -2,7 +2,7 @@ package com.pamento.calendrino.extentions
 
 // dayId format: yyyy.m.d example: 2023.1.1 or 2023.12.31
 
-fun String.triple(): Triple<Int,Int,Int> {
+fun String.triple(): Triple<Int, Int, Int> {
   val ts = this.split('.')
   return Triple(ts[0].toInt(), ts[1].toInt(), ts[2].toInt())
 }

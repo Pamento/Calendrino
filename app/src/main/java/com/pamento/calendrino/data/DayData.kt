@@ -19,4 +19,5 @@ data class DayWorker(
   val month: String,
   val firstDayOfMonth: Int,
   val weekOfYear: Int,
-  var isToday: Int? = null)
+  var isToday: Int? = null
+)

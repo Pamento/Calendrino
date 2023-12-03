@@ -11,7 +11,9 @@ import com.pamento.calendrino.ui.components.MonthsScroller
 
 @Composable
 fun MonthsScrollerWrapper() {
-  Column(modifier = Modifier.fillMaxWidth().padding(8.dp, 0.dp, 8.dp, 0.dp)) {
+  Column(modifier = Modifier
+    .fillMaxWidth()
+    .padding(8.dp, 0.dp, 8.dp, 0.dp)) {
     AllWeekNamesBox()
     MonthsScroller()
   }

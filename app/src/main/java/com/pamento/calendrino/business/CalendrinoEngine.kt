@@ -7,9 +7,10 @@ import java.util.Calendar
 import java.util.Calendar.DAY_OF_MONTH
 import java.util.Calendar.MONTH
 import java.util.Calendar.YEAR
+import java.util.Locale
 
 fun getMonth(dayId: String? = null): List<DayData> {
-  val cldr = Calendar.getInstance()
+  val cldr = Calendar.getInstance(Locale.FRANCE)
   var dayOfMont: Int? = null
 
   dayId?.let {
@@ -37,19 +38,21 @@ fun getMonth(dayId: String? = null): List<DayData> {
 }
 
 private fun monthFactory(dayWorker: DayWorker): List<DayData> {
+  // var dayOfWeekCycle: U.S.A. day = 1 Sunday; France day = 1 = monday
   val allMonth = mutableListOf<DayData>()
-  var dayOfWeekCycle = dayWorker.firstDayOfMonth
-  var weekOfYearCycle = dayWorker.weekOfYear - 1 // Sunday = 1
+  var dayOfWeekCycle =
+    dayWorker.firstDayOfMonth - 1 // Calendar.getInstance.getDayWeek if (sunday) = 1
+  val weekOfYearCycle = dayWorker.weekOfYear
 
   repeat(dayWorker.totalDays) { next ->
     val day = DayData(
-        year = dayWorker.year,
-        month = dayWorker.month,
-        day = next.inc(), // 'next' = index = 0
-        dayOfWeek = dayOfWeekCycle,
-        weekOfYear = weekOfYearCycle,
-        isToday = dayWorker.isToday != null && next.inc() == dayWorker.isToday
-      )
+      year = dayWorker.year,
+      month = dayWorker.month,
+      day = next.inc(), // 'next' = index = 0
+      dayOfWeek = dayOfWeekCycle,
+      weekOfYear = weekOfYearCycle,
+      isToday = dayWorker.isToday != null && next.inc() == dayWorker.isToday
+    )
 
     if (dayOfWeekCycle == 7) {
       dayOfWeekCycle = 1

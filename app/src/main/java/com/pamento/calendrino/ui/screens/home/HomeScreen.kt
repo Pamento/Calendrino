@@ -26,7 +26,9 @@ fun HomeScreen(
       CalendrinoAppBar(monthName = monthName, year = year)
     }
   ) { innerPadding ->
-    val modifier = Modifier.background(MaterialTheme.colorScheme.primary).padding(innerPadding)
+    val modifier = Modifier
+      .background(MaterialTheme.colorScheme.primary)
+      .padding(innerPadding)
     Surface(
       modifier = modifier
     ) {
