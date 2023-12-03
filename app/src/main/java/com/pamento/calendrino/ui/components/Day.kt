@@ -23,18 +23,16 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.pamento.calendrino.data.DayData
 import com.pamento.calendrino.ui.theme.CalendrinoTheme
 
 @Composable
 fun Day(
-  dayNumber: Number,
-  isToday: Boolean,
-  important: Boolean,
-  isSelected: Boolean
+  dayData: DayData
 ) {
-  val surfaceColor = if (isToday) MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.surfaceVariant
-  val impEventColor = if (important) Color.Red else surfaceColor
-  val todayColor = if (isSelected) MaterialTheme.colorScheme.secondary else surfaceColor
+  val surfaceColor = if (dayData.isToday) MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.surfaceVariant
+  val impEventColor = if (dayData.important) Color.Red else surfaceColor
+  val todayColor = if (dayData.isSelected) MaterialTheme.colorScheme.secondary else surfaceColor
   Surface {
     Box(
       // TODO 28/11: size must be dynamic or gird
@@ -43,15 +41,15 @@ fun Day(
       Column(
         horizontalAlignment = Alignment.CenterHorizontally
       ) {
-        Text(text = dayNumber.toString(), color = MaterialTheme.colorScheme.onSurface)
+        Text(text = dayData.day.toString(), color = MaterialTheme.colorScheme.onSurface)
         Row(
           modifier = Modifier.width(16.dp),
           horizontalArrangement = Arrangement.Center) {
-          Rectangle(color = if (isSelected) impEventColor else surfaceColor)
+          Rectangle(color = if (dayData.isSelected) impEventColor else surfaceColor)
           Rectangle(modifier = Modifier.weight(0.3f),
             color = Color.Transparent)
           Rectangle(modifier = Modifier.weight(0.7f),
-            color = if (isSelected) impEventColor else surfaceColor)
+            color = if (dayData.isSelected) impEventColor else surfaceColor)
         }
       }
     }
@@ -89,7 +87,7 @@ fun Rectangle(color: Color,
 fun PreviewDay() {
   CalendrinoTheme {
     Surface {
-      Day(dayNumber = 17, isToday = false, important = true, isSelected = true)
+      Day(DayData(year = "2023", month = "12", day = 17, dayOfWeek = 1, weekOfYear = 46))
     }
   }
 }

@@ -12,7 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import com.pamento.calendrino.ui.components.CalendrinoAppBar
-import com.pamento.calendrino.ui.components.MonthContainer
+import com.pamento.calendrino.ui.components.wrappers.MonthsScrollerWrapper
 import com.pamento.calendrino.ui.theme.CalendrinoTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -30,7 +30,7 @@ fun HomeScreen(
     Surface(
       modifier = modifier
     ) {
-      MonthContainer()
+      MonthsScrollerWrapper()
     }
   }
 }
