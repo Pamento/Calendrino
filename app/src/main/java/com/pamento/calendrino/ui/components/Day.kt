@@ -31,28 +31,33 @@ import com.pamento.calendrino.ui.theme.CalendrinoTheme
 @Composable
 fun Day(
   modifier: Modifier = Modifier,
-  dayData: DayData
+  dayData: DayData? = null
 ) {
-  val surfaceColor = if (dayData.isToday) MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.surfaceVariant
-  val impEventColor = if (dayData.important) Color.Red else surfaceColor
-  val todayColor = if (dayData.isSelected) MaterialTheme.colorScheme.secondary else surfaceColor
+  var surfaceColor = MaterialTheme.colorScheme.surfaceVariant
+  var impEventColor = surfaceColor
+  var todayColor = surfaceColor
+  dayData?.let {
+    if (it.isToday) surfaceColor = MaterialTheme.colorScheme.background
+    if (it.important) impEventColor = Color.Red
+    if (it.isSelected) todayColor = MaterialTheme.colorScheme.secondary
+  }
   Surface {
     Box(
-      // TODO 28/11: size must be dynamic or gird
       modifier = modifier.background(surfaceColor).border(2.dp, todayColor, RoundedCornerShape(18)),
       contentAlignment = Alignment.Center) {
       Column(
+        modifier = Modifier.padding(vertical = 8.dp),
         horizontalAlignment = Alignment.CenterHorizontally
       ) {
-        Text(text = dayData.day.toString(), color = MaterialTheme.colorScheme.onSurface)
+        Text(text = dayData?.day.toString(), color = MaterialTheme.colorScheme.onSurface)
         Row(
           modifier = Modifier.width(16.dp),
           horizontalArrangement = Arrangement.Center) {
-          Rectangle(color = if (dayData.isSelected) impEventColor else surfaceColor)
+          Rectangle(color = impEventColor)
           Rectangle(modifier = Modifier.weight(0.3f),
             color = Color.Transparent)
           Rectangle(modifier = Modifier.weight(0.7f),
-            color = if (dayData.isSelected) impEventColor else surfaceColor)
+            color = impEventColor)
         }
       }
     }
@@ -94,7 +99,8 @@ fun PreviewDay() {
   CalendrinoTheme {
     Surface {
       Day(modifier = Modifier.width(48.dp),
-        DayData(year = "2023", month = "12", day = 17, dayOfWeek = 1, weekOfYear = 46))
+        DayData(year = "2023", month = "12", day = 17, dayOfWeek = 1, weekOfYear = 46,
+          isToday = true, isSelected = true, important = true))
     }
   }
 }
